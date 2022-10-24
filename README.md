@@ -2,8 +2,8 @@
 
 <h3>To launch app:</h3>
 - pull this file <br>
-- follow the link https://www.coinapi.io and get free API_KEY
-- open application.properties and put your free key
+- follow the link https://www.coinapi.io and get free API_KEY <br>
+- open application.properties and put your free key <br>
 - start docker on your local machine <br>
 - open terminal and run mvn clean package <br>
 - after that start command: docker-compose up <br>
@@ -22,9 +22,15 @@ has been implemented. To get historical prices you need to fetch crypto <br>
 and date. I restrict data, so you will be represented only first 20 <br>
 exchanges. While I tested Market Data API I noticed it may need some time <br>
 to get current price for specific cryptos (it works good for popular cryptos <br>
-such a BITCOIN, Ethereum, etcetera). In this way I didn't set too much time <br>
-for timing. If there won't be relevant responds from API during timing, <br>
-I just return specific message for this crypto.
+such a BITCOIN, Ethereum, etcetera). In this way I didn't set too timing. If <br>
+there won't be relevant responds from API during timing, I just return result <br>
+which has been cushed during previous requests, or, if there weren't any <br>
+relevant information about requested crypto, server just returns specific <br>
+message for this crypto. <br>
+
+GET: /cryptos/all - get all cryptos from DB <br>
+GET: /prices/current - get current price to specific crypto <br>
+GET: /prices/history - get history price for specific crypto at determine time <br>
 
 <h3>In this APP were used such technologies like:</h3>
 - org.apache.maven, version 4.0.0<br>
@@ -33,5 +39,6 @@ I just return specific message for this crypto.
 - spring boot <br>
 - websockets <br>
 - liquibase <br>
+- rabbitMQ <br>
 - swagger <br>
 - docker <br>

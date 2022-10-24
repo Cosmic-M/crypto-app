@@ -1,20 +1,17 @@
 package com.example.cryptocurrencyapp.service.impl;
 
 import com.example.cryptocurrencyapp.service.ResponseParser;
-import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.squareup.okhttp.Response;
 import java.io.IOException;
 import java.io.InputStream;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 @Component
+@RequiredArgsConstructor
 public class ResponseParserImpl implements ResponseParser {
-    private final ObjectMapper objectMapper = new ObjectMapper();
-
-    {
-        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-    }
+    private final ObjectMapper objectMapper;
 
     @Override
     public <T> T parse(Response response, Class<T> clazz) {

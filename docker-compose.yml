@@ -13,9 +13,19 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+  rabbitmq:
+    image: rabbitmq:3.7.2-management
+    container_name: "rabbitmq"
+    env_file: ./.env
+    ports:
+      - $RABBIT_MQ_LOCAL_PORT:$RABBIT_MQ_DOCKER_PORT
+    environment:
+      RABBITMQ_DEFAULT_USER: "guest"
+      RABBITMQ_DEFAULT_PASS: "guest"
   app:
     depends_on:
       - postgres
+      - rabbitmq
     image: cosmic-m/crypto-currency-app
     build: .
     env_file: ./.env
@@ -26,6 +36,8 @@ services:
       SPRING_APPLICATION_JSON: '{
         "spring.datasource.url" : "jdbc:postgresql://postgres:$POSTGRES_DOCKER_PORT/$POSTGRES_DB",
         "spring.datasource.username" : "$POSTGRES_USER",
-        "spring.datasource.password" : "$POSTGRES_PASSWORD"
+        "spring.datasource.password" : "$POSTGRES_PASSWORD",
+        "spring.rabbitmq.username" : "RABBIT_MQ_USER",
+        "spring.rabbitmq.password"  : "$RABBIT_MQ_PASSWORD"
       }'
       JAVA_TOOL_OPTIONS: "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005"

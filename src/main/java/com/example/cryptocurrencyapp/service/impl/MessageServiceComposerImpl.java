@@ -4,6 +4,7 @@ import com.example.cryptocurrencyapp.dto.MessageResponseDto;
 import com.example.cryptocurrencyapp.model.ApiMessage;
 import com.example.cryptocurrencyapp.service.MessageServiceComposer;
 import com.example.cryptocurrencyapp.service.maper.MessageMapper;
+import com.example.cryptocurrencyapp.util.CryptoSymbolConverter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -21,7 +22,7 @@ public class MessageServiceComposerImpl implements MessageServiceComposer {
         List<MessageResponseDto> result = new ArrayList<>();
         List<String> symbolIds = new ArrayList<>();
         for (String crypto : cryptoGroup) {
-            symbolIds.add("COINBASE_SPOT_" + crypto + "_USD");
+            symbolIds.add(CryptoSymbolConverter.toSymbolId(crypto));
         }
         Map<String, ApiMessage> messageMap = messageHandler.getMessageMap();
         for (String key : symbolIds) {

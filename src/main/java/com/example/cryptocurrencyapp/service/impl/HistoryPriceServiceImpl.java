@@ -16,6 +16,9 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class HistoryPriceServiceImpl implements HistoryPriceService {
+    private static final String REQUEST_PREFIX = "/COINBASE_SPOT_";
+    private static final String REQUEST_SUFFIX = "_USD/history?time_start=";
+    private static final String REQUEST_TAIL = "&limit=20";
     private final ResponseParser responseParser;
     @Value(value = "${historyRestApiLink}")
     private String link;
@@ -24,28 +27,10 @@ public class HistoryPriceServiceImpl implements HistoryPriceService {
 
     @Override
     public List<ApiHistoryPriceDto> getHistoryPrice(String cryptoName, String date) {
-        StringBuilder builder = new StringBuilder();
-        builder.append(link)
-                .append("/")
-                .append("COINBASE")
-                .append("_")
-                .append("SPOT")
-                .append("_")
-                .append(cryptoName)
-                .append("_")
-                .append("USD")
-                .append("/")
-                .append("history")
-                .append("?")
-                .append("time_start=")
-                .append(date)
-                .append("&")
-                .append("limit=")
-                .append("20");
-
+        String toSite = link + REQUEST_PREFIX + cryptoName + REQUEST_SUFFIX + date + REQUEST_TAIL;
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder()
-                .url(builder.toString())
+                .url(toSite)
                 .addHeader("X-CoinAPI-Key", key)
                 .build();
         try {
@@ -54,7 +39,8 @@ public class HistoryPriceServiceImpl implements HistoryPriceService {
                     .parse(response, ApiHistoryPriceDto[].class);
             return Arrays.stream(apiHistoryPriceDtos).toList();
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("Cannot execute request to url: "
+                    + toSite + System.lineSeparator() + e);
         }
     }
 }

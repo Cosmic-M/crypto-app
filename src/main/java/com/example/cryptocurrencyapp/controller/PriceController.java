@@ -26,11 +26,6 @@ public class PriceController {
     @ApiOperation(value = "get current price to specific crypto")
     public List<MessageResponseDto> getCurrentPrice(@RequestParam List<String> cryptoGroup) {
         webSocketCryptoService.sendRequest(cryptoGroup);
-        try {
-            Thread.sleep(3500);
-        } catch (InterruptedException e) {
-            throw new RuntimeException("Method sleep threw exception. " + e);
-        }
         return messageServiceComposer.composeResponse(cryptoGroup);
     }
 
